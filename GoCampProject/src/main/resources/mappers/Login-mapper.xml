@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.project.login.LoginDao">
+ 
+   <select id="loginOK" parameterType="com.project.login.LoginVO"
+                    	resultType="com.project.login.LoginVO" >
+    
+    SELECT * FROM LoginTBL WHERE username = #{username}
+    
+  </select>
+  
+  <select id="getLoginList" parameterType="com.project.login.LoginVO"
+                    		resultType="com.project.login.LoginVO" >
+    
+    SELECT * FROM LoginTBL
+    
+  </select>
+  
+  <select id="getLogin" parameterType="com.project.login.LoginVO"
+                    	resultType="com.project.login.LoginVO" >
+    
+    SELECT idx, username, password, postcode, roadAddress, detailAddress
+	, tel, role, name, registration from loginTBL where username = #{username}
+    
+  </select>
+  
+  <select id="checkID" parameterType="com.project.login.LoginVO" 
+  						resultType="int">
+  	SELECT COUNT(1)
+  	  FROM LoginTBL
+  	 WHERE username = #{username}
+  </select>
+  
+  <insert id="memberInsert" parameterType="com.project.login.LoginVO">
+   
+        INSERT INTO LoginTBL (
+            idx, username, password, postcode, roadAddress, detailAddress, tel, role, name, registration
+        ) VALUES (
+            idx_sequence.nextval, #{username}, #{password}, #{postcode}, #{roadAddress}, #{detailAddress}, #{tel}, #{role}, #{name}, sysdate
+        )
+
+   </insert>
+   
+   <update id="memberUpdate" parameterType="com.project.login.LoginVO">
+   
+	    UPDATE LoginTBL
+	    SET
+	      postcode = #{postcode},
+	      roadAddress = #{roadAddress},
+	      detailAddress = #{detailAddress},
+	      tel = #{tel},
+	      role = #{role},
+	      name = #{name}
+	    WHERE username = #{username}
+
+   </update>
+   
+   <delete id="memberDelete" parameterType="com.project.login.LoginVO">
+   
+        DELETE FROM LoginTBL where username = #{username}
+
+   </delete>
+ </mapper>

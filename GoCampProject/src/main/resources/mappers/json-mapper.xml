@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.project.json.JsonDao">
+ 
+ <insert id="jsonInsert" parameterType="com.project.json.JsonVO">
+
+	INSERT INTO CAMPINFO (idx, facility, roadAddress, latitude, longitude, 
+		telephone, facilityInfo, facilityFeature, homepage, facilElectric, 
+		facilHotwater, facilWifi, facilFirewood, facilMarket)
+	VALUES (
+		seq_campinfo.nextval,#{facility}, #{roadAddress}, #{latitude}, #{longitude}, 
+	    #{telephone}, #{facilityInfo}, #{facilityFeature}, #{homepage}, 
+	    #{facilElectric}, #{facilHotwater}, #{facilWifi}, #{facilFirewood}, #{facilMarket}
+	)
+ 
+ </insert>
+ 
+ <select id="getJsonList" parameterType="com.project.json.JsonVO"
+ 							resultType="com.project.json.JsonVO">
+ 							
+   <![CDATA[
+	  select rownum, K.* 
+	   from 
+	     (select rownum as rnum, M.*
+	      from (select * from campinfo 	      
+	          WHERE 1=1
+	         ]]>
+	         	
+			  <if test="ch1 == 'facility' ">
+			    and facility like '%' || #{ch2} || '%' 	  
+			  </if>
+			  
+			  <if test="ch1 == 'roadAddress' ">
+			    and roadAddress like '%' || #{ch2} || '%' 	  
+			  </if>
+
+	         <![CDATA[
+	       order by cnt desc) M
+	      where rownum <= #{start}+10) K
+	  where RNUM >= #{start}
+   ]]>
+   
+ </select>
+ 
+  <select id="getJson" parameterType="com.project.json.JsonVO"
+ 							resultType="com.project.json.JsonVO">
+ 							
+ 		select * from campinfo where idx=#{idx}
+ 
+ </select>
+ 
+ <select id="totalCount" resultType="int" 
+ 						parameterType="com.project.json.JsonVO">
+ 							
+ 	select count(*) from campinfo where 1=1
+	
+			  <if test="ch1 == 'facility' ">
+			    and facility like '%' || #{ch2} || '%' 	  
+			  </if>
+			  
+			  <if test="ch1 == 'roadAddress' ">
+			    and roadAddress like '%' || #{ch2} || '%' 	  
+			  </if>
+ 
+ </select>
+ 
+	<update id="cnt" parameterType="com.project.json.JsonVO">
+	    update campinfo
+	    set cnt=cnt+1
+	    where idx = #{idx}
+	</update>
+	
+ </mapper>

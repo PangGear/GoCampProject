@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.project.booking.BookingDao">
+ 
+ <insert id="bookingInsert" parameterType="com.project.booking.BookingVO">
+
+        INSERT INTO BookingTbl 
+        (bookidx, facility, username, name, tel, postcode, roadAddress, 
+        detailAddress, startDate, endDate, person, fire, meat)
+        VALUES 
+        (seq_bookidx.nextval, 
+         #{facility}, #{username}, #{name}, #{tel}, #{postcode}, 
+         #{roadAddress}, #{detailAddress}, #{startDate}, 
+         #{endDate}, #{person}, #{fire}, #{meat})
+ 
+ </insert>
+ 
+ <select id="getBookingList" parameterType="com.project.booking.BookingVO"
+ 							resultType="com.project.booking.BookingVO">
+ 							
+   <![CDATA[
+	  select rownum, K.* 
+	   from 
+	     (select rownum as rnum, M.*
+	      from (select * from bookingtbl 	      
+	          WHERE 1=1
+	         ]]>
+	         	
+			  <if test="ch1 == 'name' ">
+			    and facility like '%' || #{ch2} || '%' 	  
+			  </if>
+			  
+			  <if test="ch1 == 'tel' ">
+			    and roadAddress like '%' || #{ch2} || '%' 	  
+			  </if>
+
+	         <![CDATA[
+	       order by bookidx desc) M
+	      where rownum <= #{start}+10) K
+	  where RNUM >= #{start}
+   ]]>
+   
+ </select>
+ 
+<select id="memberBookingList" parameterType="com.project.booking.BookingVO"
+    					resultType="com.project.booking.BookingVO">
+    					
+    select * from bookingtbl where username=#{username} order by bookidx
+    
+</select> 
+
+<select id="memberBooking" parameterType="com.project.booking.BookingVO"
+    					resultType="com.project.booking.BookingVO">
+    					
+    select * from bookingtbl where username=#{username} and bookidx = #{bookidx}
+    
+</select>
+ 
+<update id="bookingUpdate" parameterType="com.project.booking.BookingVO">
+
+	update bookingtbl 
+	set name=#{name},tel=#{tel},fire=#{fire},meat=#{meat},person=#{person}
+	where bookidx=#{bookidx}
+
+</update>
+
+<delete id="getBookingDelete" parameterType="com.project.booking.BookingVO">
+    					
+    delete from bookingtbl where bookidx=#{bookidx}
+    
+</delete>
+
+<delete id="getBookingListDelete" parameterType="com.project.booking.BookingVO">
+    					
+    delete from bookingtbl where bookidx=#{bookidx}
+    
+</delete>
+ </mapper>

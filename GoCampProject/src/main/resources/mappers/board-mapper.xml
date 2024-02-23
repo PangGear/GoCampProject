@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.project.board.BoardDao">
+ <insert id="boardInsert" parameterType="com.project.board.BoardVO">
+ 
+     INSERT INTO campboard (
+        boardidx,
+        title,
+        content,
+        facility,
+        roadAddress,
+        telephone,
+        cnt,
+        img,
+        inst_date
+    )
+    VALUES (
+        seq_boardidx.nextval,
+        #{title},
+        #{content},
+        #{facility},
+        #{roadAddress},
+        #{telephone},
+        #{cnt},
+        #{img},
+        sysdate
+    )
+ 
+ </insert>
+ 
+ <select id="getBoardList" parameterType="com.project.board.BoardVO"
+ 							resultType="com.project.board.BoardVO">
+ 
+ 	SELECT * FROM campboard order by cnt desc
+ 
+ </select>
+ 
+ <select id="getBoard" parameterType="com.project.board.BoardVO"
+ 							resultType="com.project.board.BoardVO">
+ 
+ 	SELECT * FROM campboard where boardidx = #{boardidx}
+ 
+ </select>
+ 
+ <update id="cnt" parameterType="com.project.json.JsonVO">
+	update campboard
+	set cnt=cnt+1
+	where boardidx = #{boardidx}
+</update>
+ 
+ </mapper>
